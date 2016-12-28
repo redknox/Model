@@ -1,0 +1,20 @@
+{
+  "name": "redknox/model",
+  "description": "一个简单的pdo类",
+  "type": "library",
+  "license": "GNU",
+  "authors": [
+    {
+      "name": "Kong Haifeng",
+      "email": "redknox@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Redknox\\": ""
+    }
+  }
+}
