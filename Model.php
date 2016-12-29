@@ -10,7 +10,7 @@
 
 namespace Redknox;
 
-//孔海峰开发的所有公共应用工具都房子啊redknox命名空间下，如果为了配合自动加载,可以在应用中建立redknox目录,将孔海峰建立的公共文件放在该目录下
+//孔海峰开发的所有公共应用工具都放在redknox命名空间下，如果为了配合自动加载,可以在应用中建立redknox目录,将孔海峰建立的公共文件放在该目录下
 class Model
 {
     private $column;
@@ -304,13 +304,13 @@ class Model
             $this->sql = "select " . $this->fields . " from " . $this->tableName . " where id=" . $id;
             $query = $this->pdo->query($this->sql);
             $result = $query->fetch(\PDO::FETCH_ASSOC);
-            if($result) {
+            if ($result) {
                 $this->modelInit();
                 foreach ($result as $key => $value) {   //用查到的值更新column表
                     $this->column[$key] = $result[$key];
                 }
                 return $result;
-            }else{
+            } else {
                 return false;
             }
         } else {
@@ -331,6 +331,26 @@ class Model
         $this->lastAffectedRowCount = count($result);
         $this->modelInit();
         return ($result);
+    }
+
+    /**
+     * 根据查询条件删除记录。注意为了安全起见,为避免误操作,目前不允许where为空值,导致清空表格的删除。需要清空表格可以加一个 where 1 的条件。
+     * @return bool|integer 如果删除命令顺利执行,则返回删除的行数;如果失败,则
+     */
+    function delete()
+    {
+        if ($this->where != '') {    //安全起见暂时不允许清空表格
+            $this->sql = " DELETE FROM " . $this->tableName . $this->where;
+            if ($this->execSql()) {
+                return $this->lastAffectedRowCount;
+            } else {
+                return false;
+            }
+        } else {
+            $this->errNo = 20001;
+            $this->errMsg = '必须输入查询条件!';
+            return false;
+        }
     }
 
     /**
